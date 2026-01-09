@@ -52,3 +52,7 @@ Làm theo các bước sau để chạy dự án trên máy local:
 ### 2. Cài đặt dependencies
 ```bash
 npm install
+
+### 3. Chạy website
+```bash
+npm run dev
