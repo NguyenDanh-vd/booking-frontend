@@ -1,15 +1,16 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
-import Header from '@/components/Header';
-import { Toaster } from 'react-hot-toast';
+import ToasterProvider from '@/components/ToasterProvider'; 
 import { AuthProvider } from '@/context/AuthContext';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Booking App - Đặt phòng Homestay',
-  description: 'Website đặt phòng uy tín, giá rẻ',
+  title: 'BookingApp - Đặt phòng homestay, khách sạn',
+  description: 'Nền tảng đặt phòng trực tuyến tốt nhất',
 };
 
 export default function RootLayout({
@@ -18,19 +19,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="vi" suppressHydrationWarning>
+    <html lang="vi" suppressHydrationWarning={true}>
       <body className={inter.className}>
-        <Toaster position="top-center" />
         <AuthProvider>
+          {/* Thay thế cục code dài ngoằng bằng 1 dòng này */}
+          <ToasterProvider /> 
           <Header />
-          <div className="min-h-screen bg-gray-50">
-            {children}
+          <div className="min-h-screen flex flex-col">
+            <main className="flex-grow">
+              {children}
+            </main>
+            <Footer />
           </div>
         </AuthProvider>
-
-        <footer className="bg-gray-100 py-6 text-center text-gray-500 text-sm">
-          © 2026 Booking App. All rights reserved.
-        </footer>
       </body>
     </html>
   );

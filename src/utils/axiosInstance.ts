@@ -3,9 +3,7 @@ import axios from 'axios';
 // 1. Tạo instance với cấu hình mặc định
 const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
+  // Không set Content-Type mặc định để FormData hoạt động đúng
   timeout: 10000, // 10 giây không phản hồi thì hủy
 });
 
@@ -17,8 +15,18 @@ axiosInstance.interceptors.request.use(
     if (typeof window !== 'undefined') {
       const token = localStorage.getItem('access_token');
       if (token) {
+        config.headers = config.headers || {};
         config.headers.Authorization = `Bearer ${token}`;
       }
+    }
+    // Nếu body là FormData, để axios tự set Content-Type (multipart/form-data; boundary=...)
+    if (config && config.data instanceof FormData) {
+      if (config.headers && 'Content-Type' in config.headers) {
+        delete config.headers['Content-Type'];
+      }
+    } else {
+      config.headers = config.headers || {};
+      if (!config.headers['Content-Type']) config.headers['Content-Type'] = 'application/json';
     }
     return config;
   },
