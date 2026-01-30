@@ -1,0 +1,63 @@
+@import "tailwindcss";
+
+:root {
+  /* --- LIGHT MODE: Trắng tinh khiết --- */
+  --background: #ffffff;
+  --foreground: #0f172a;
+  --muted: #6b7280;
+  --surface: #ffffff;
+  --card: #ffffff;
+  --border: #e6e7ea;
+  --header-bg: rgba(255, 255, 255, 0.95);
+  --primary: #2563eb;
+}
+
+.dark {
+  /* --- DARK MODE: Xanh đen sâu --- */
+  --background: #0b1220;
+  --foreground: #e6eef8;
+  --muted: #9aa6b2;
+  --surface: #0f1724;
+  --card: #0e1a2b;
+  --border: #1f2a37;
+  --header-bg: rgba(6, 10, 15, 0.8);
+  --primary: #3b82f6;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-card: var(--card);
+  --color-border: var(--border);
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* --- ÉP CÁC CLASS CỐ ĐỊNH PHẢI THEO THEME --- */
+/* Khi ở Light Mode, các class xám này sẽ thành trắng */
+.bg-gray-50, .bg-white { 
+  background-color: var(--background) !important; 
+}
+
+/* Khi ở Dark Mode, chúng sẽ thành màu tối hệ thống */
+.dark .bg-gray-50 { background-color: var(--surface) !important; }
+.dark .bg-white { background-color: var(--card) !important; }
+
+/* Ép màu chữ và viền */
+.dark .text-gray-900 { color: var(--foreground) !important; }
+.dark .text-gray-500 { color: var(--muted) !important; }
+.dark .border-gray-100, .dark .border-gray-200 { border-color: var(--border) !important; }
+
+/* === HOVER ZOOM THEO CON TRỎ === */
+.zoom-hover img {
+  transform-origin: var(--x, 50%) var(--y, 50%);
+}
+
+.zoom-hover:hover img {
+  transform: scale(1.6);
+}
