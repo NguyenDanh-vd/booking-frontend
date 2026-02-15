@@ -11,6 +11,7 @@ export interface IUser {
   avatar?: string;
   role: 'GUEST' | 'HOST' | 'ADMIN';
   phone?: string;
+  isVerified?: boolean;
 }
 
 // 2. Định nghĩa kiểu dữ liệu cho Context
