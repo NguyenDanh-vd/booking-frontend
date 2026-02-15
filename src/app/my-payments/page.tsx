@@ -16,9 +16,10 @@ export default function MyPaymentsPage() {
     const fetchMyPayments = async () => {
         try {
             const data = await apiGet<IPayment[]>('/payments');
+            console.log('Payments data:', data);
             setPayments(Array.isArray(data) ? data : []);
         } catch (error) {
-            console.error(error);
+            console.error('Error fetching payments:', error);
         } finally {
             setLoading(false);
         }
@@ -34,6 +35,14 @@ export default function MyPaymentsPage() {
             return payment.status === filter;
         });
     }, [payments, filter]);
+
+    const totals = useMemo(() => {
+        const totalCount = payments.length;
+        const totalAmount = payments.reduce((acc, p) => acc + (Number(p.amount) || 0), 0);
+        const filteredCount = filteredPayments.length;
+        const filteredAmount = filteredPayments.reduce((acc, p) => acc + (Number(p.amount) || 0), 0);
+        return { totalCount, totalAmount, filteredCount, filteredAmount };
+    }, [payments, filteredPayments]);
 
     const getStatusStyle = (status: string) => {
         const base = "ring-1 shadow-sm font-bold";
@@ -77,6 +86,23 @@ export default function MyPaymentsPage() {
                 >
                     <Search size={16} /> Tìm chỗ ở mới
                 </Link>
+            </div>
+
+            {/* TOTALS */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm flex flex-col">
+                    <span className="text-sm text-gray-500">Tổng số thanh toán</span>
+                    <span className="mt-3 font-extrabold text-2xl text-gray-900">{totals.totalCount}</span>
+                    <span className="text-xs text-gray-400">Lọc: {totals.filteredCount}</span>
+                </div>
+
+                <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm flex flex-col">
+                    <span className="text-sm text-gray-500">Tổng doanh thu</span>
+                    <span className="mt-3 font-extrabold text-2xl text-blue-600">
+                        {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(totals.totalAmount)}
+                    </span>
+                    <span className="text-xs text-gray-400">Lọc: {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(totals.filteredAmount)}</span>
+                </div>
             </div>
 
             {/* FILTER TABS */}
